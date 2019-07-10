@@ -20,6 +20,9 @@
           {{ fixedText }}
         </p>
       </b-jumbotron>
+      <b-button variant="primary" @click="copyText">
+        クリップボードにコピー
+      </b-button>
       <b-button variant="success" @click="resetText">
         リセット
       </b-button>
@@ -72,7 +75,7 @@ export default {
             }
 
             const unit = text.match(/((?<=\()(\S*))[^ )]/gi)
-            if (unit === '%') {
+            if (String(unit) === '%') {
               result += unit + ', '
             } else if (unit === null) {
               result += ', '
@@ -91,6 +94,26 @@ export default {
     },
     showAlert() {
       this.dismissCountDown = this.dismissSecs
+    },
+    copyText() {
+      // テキストエリアを用意する
+      const copyFrom = document.createElement('textarea')
+      // テキストエリアへ値をセット
+      copyFrom.textContent = this.fixedText
+
+      // bodyタグの要素を取得
+      const bodyElm = document.getElementsByTagName('body')[0]
+      // 子要素にテキストエリアを配置
+      bodyElm.appendChild(copyFrom)
+
+      // テキストエリアの値を選択
+      copyFrom.select()
+      // コピーコマンド発行
+      const retVal = document.execCommand('copy')
+      // 追加テキストエリアを削除
+      bodyElm.removeChild(copyFrom)
+      // 処理結果を返却
+      return retVal
     }
   }
 }
