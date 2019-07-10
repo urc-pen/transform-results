@@ -60,10 +60,6 @@ export default {
         let result = ''
         textArray.forEach((text) => {
           if (text !== '') {
-            if (text.indexOf('＾') !== -1) {
-              text = text.replace('＾', '^')
-            }
-
             const item = text.match(/^\S*/gi)
             result += item + ' '
 
@@ -84,6 +80,9 @@ export default {
             }
           }
         })
+        result = result.replace(/（/g, '(')
+        result = result.replace(/）/g, ')')
+        result = result.replace(/＾/g, '^')
         return result.slice(0, -2)
       }
     }
